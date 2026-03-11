@@ -1,7 +1,7 @@
 import React from 'react';
 import { styled } from 'storybook/theming';
 import { ObjectControl, RangeControl } from '@storybook/addon-docs/blocks';
-import { Form, Placeholder, TabsState } from 'storybook/internal/components';
+import { Form, Placeholder } from 'storybook/internal/components';
 import { Card } from '../Card';
 import statusTextMap from '../../utils/statusMap';
 
@@ -75,6 +75,18 @@ const Field = styled(SBField)`
     }
 `;
 
+const ResponseSection = styled.div`
+    border-top: 1px solid ${({ theme }) => theme.appBorderColor};
+`;
+
+const ResponseHeader = styled.div`
+    padding: 0.5rem 0.75rem;
+    font-weight: 700;
+    font-size: ${({ theme }) => theme.typography.size.s1}px;
+    color: ${({ theme }) => theme.barTextColor};
+    border-bottom: 1px solid ${({ theme }) => theme.appBorderColor};
+`;
+
 interface MockItemProps {
     id: string | number;
     url: string;
@@ -135,26 +147,25 @@ export const MockItem = ({
                     />
                 </Field>
             </StatusDelayContainer>
-            <TabsState initial={`response${id}`}>
-                <div id={`response${id}`} title="Response">
-                    {typeof response === 'function' ? (
-                        <Placeholder>
-                            This is a custom function. You can only change it
-                            from the declaration.
-                        </Placeholder>
-                    ) : (
-                        <ObjectContent>
-                            <ObjectControl
-                                name=""
-                                value={response}
-                                onChange={(value: any) =>
-                                    onChange('response', value)
-                                }
-                            />
-                        </ObjectContent>
-                    )}
-                </div>
-            </TabsState>
+            <ResponseSection>
+                <ResponseHeader>Response</ResponseHeader>
+                {typeof response === 'function' ? (
+                    <Placeholder>
+                        This is a custom function. You can only change it
+                        from the declaration.
+                    </Placeholder>
+                ) : (
+                    <ObjectContent>
+                        <ObjectControl
+                            name=""
+                            value={response}
+                            onChange={(value: any) =>
+                                onChange('response', value)
+                            }
+                        />
+                    </ObjectContent>
+                )}
+            </ResponseSection>
         </Card>
     );
 };
