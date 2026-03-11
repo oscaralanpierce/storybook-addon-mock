@@ -1,6 +1,6 @@
 import { getBaseUrl } from './url';
 
-export function Request(input, options = {}) {
+export function Request(this: any, input: any, options: any = {}) {
     if (typeof input === 'object') {
         this.method = options.method || input.method || 'GET';
         this.url = input.url;

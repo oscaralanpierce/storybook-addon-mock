@@ -12,7 +12,7 @@ import { arrayEquals } from './array';
 import { getNormalizedUrl } from './url';
 import { validate, schema } from './validator';
 
-let global =
+let global: any =
     // eslint-disable-next-line no-undef
     (typeof globalThis !== 'undefined' && globalThis) ||
     (typeof self !== 'undefined' && self) ||
@@ -20,6 +20,10 @@ let global =
     {};
 
 export class Faker {
+    MockXhr: any;
+    requestMap: Record<string, any>;
+    ignoreQueryParams: boolean;
+
     constructor() {
         this.MockXhr = newMockXhr();
         this.MockXhr.onSend = this.mockXhrRequest;
@@ -36,12 +40,12 @@ export class Faker {
 
     getRequests = () => Object.values(this.requestMap);
 
-    getKey = (url = '', searchParamKeys = [], method = 'GET') =>
+    getKey = (url = '', searchParamKeys: string[] = [], method = 'GET'): string =>
         url && method
             ? [url, ...searchParamKeys, method.toLowerCase()].join('_')
             : '';
 
-    makeInitialRequestMap = (requests) => {
+    makeInitialRequestMap = (requests: any) => {
         if (!requests || !Array.isArray(requests)) {
             return;
         }
@@ -52,11 +56,11 @@ export class Faker {
         });
     };
 
-    setIgnoreQueryParams = (value) => {
+    setIgnoreQueryParams = (value: boolean) => {
         this.ignoreQueryParams = value;
     };
 
-    add = (request) => {
+    add = (request: any) => {
         const { path, searchParamKeys } = getNormalizedUrl(request.url);
         const key = this.getKey(path, searchParamKeys, request.method);
         const errors = validate(request, schema);
@@ -81,7 +85,7 @@ export class Faker {
         };
     };
 
-    update = (item, fieldKey, value) => {
+    update = (item: any, fieldKey: string, value: any) => {
         const { url, method } = item;
         const { path, searchParamKeys } = getNormalizedUrl(url);
         const itemKey = this.getKey(path, searchParamKeys, method);
@@ -96,7 +100,7 @@ export class Faker {
         }
     };
 
-    matchMock = (url, method = 'GET') => {
+    matchMock = (url: string, method = 'GET'): any => {
         const { path, searchParamKeys } = getNormalizedUrl(url);
 
         for (let key in this.requestMap) {
@@ -117,14 +121,14 @@ export class Faker {
         return null;
     };
 
-    matchQueryParams = (searchParams, requestSearchParams) => {
+    matchQueryParams = (searchParams: string[], requestSearchParams: string[]): boolean => {
         return (
             this.ignoreQueryParams ||
             arrayEquals(searchParams, requestSearchParams)
         );
     };
 
-    mockFetch = (input, options) => {
+    mockFetch = (input: any, options?: any) => {
         const request = new Request(input, options);
         const { url, method } = request;
         const matched = this.matchMock(url, method);
@@ -165,7 +169,7 @@ export class Faker {
         });
     };
 
-    mockXhrRequest = (request) => {
+    mockXhrRequest = (request: any) => {
         const { method, url, body } = request;
         const matched = this.matchMock(url, method);
         if (matched) {
@@ -222,7 +226,7 @@ export class Faker {
         }
     };
 
-    transferEventListeners(fakeXhr, realXhr) {
+    transferEventListeners(fakeXhr: any, realXhr: any) {
         fakeXhr._listeners.forEach((handlers, eventName) => {
             if (eventName === 'loadstart') {
                 // We can't transfer loadstart because it fires as soon as the user calls xhr.start() and

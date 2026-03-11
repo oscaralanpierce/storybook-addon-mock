@@ -10,18 +10,23 @@ import { ADDON_ID, EVENTS } from './utils/constants';
 import { MockItem } from './components/MockItem';
 import { ErrorItem } from './components/ErrorItem';
 
-export const Panel = (props) => {
-    const [state, setState] = useAddonState(ADDON_ID, {
+interface PanelState {
+    mockData: any[];
+    disableUsingOriginal: boolean;
+}
+
+export const Panel = (props: any) => {
+    const [state, setState] = useAddonState<PanelState>(ADDON_ID, {
         mockData: [],
         disableUsingOriginal: false,
     });
     const emit = useChannel({
-        [EVENTS.SEND]: (newState) => {
+        [EVENTS.SEND]: (newState: PanelState) => {
             setState(newState);
         },
     });
 
-    const onChange = (item, key, value) => {
+    const onChange = (item: any, key: string, value: any) => {
         emit(EVENTS.UPDATE, { item, key, value });
     };
 
@@ -37,7 +42,7 @@ export const Panel = (props) => {
     return (
         <AddonPanel {...props}>
             <ScrollArea>
-                {mockData.map((item, index) => {
+                {mockData.map((item: any, index: number) => {
                     const { errors, originalRequest } = item;
                     if (errors && errors.length) {
                         return (
@@ -56,7 +61,7 @@ export const Panel = (props) => {
                         <MockItem
                             id={index}
                             key={index}
-                            onChange={(key, value) =>
+                            onChange={(key: string, value: any) =>
                                 onChange(item, key, value)
                             }
                             disableUsingOriginal={disableUsingOriginal}
