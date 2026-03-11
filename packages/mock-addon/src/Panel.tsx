@@ -6,12 +6,12 @@ import {
     ScrollArea,
 } from 'storybook/internal/components';
 
-import { ADDON_ID, EVENTS } from './utils/constants';
+import { ADDON_ID, EVENTS, MockRequest } from './utils/constants';
 import { MockItem } from './components/MockItem';
 import { ErrorItem } from './components/ErrorItem';
 
 interface PanelState {
-    mockData: any[];
+    mockData: MockRequest[];
     disableUsingOriginal: boolean;
 }
 
@@ -26,7 +26,7 @@ export const Panel = (props: any) => {
         },
     });
 
-    const onChange = (item: any, key: string, value: any) => {
+    const onChange = (item: MockRequest, key: string, value: any) => {
         emit(EVENTS.UPDATE, { item, key, value });
     };
 
@@ -42,7 +42,7 @@ export const Panel = (props: any) => {
     return (
         <AddonPanel {...props}>
             <ScrollArea>
-                {mockData.map((item: any, index: number) => {
+                {mockData.map((item: MockRequest, index: number) => {
                     const { errors, originalRequest } = item;
                     if (errors && errors.length) {
                         return (

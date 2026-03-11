@@ -119,7 +119,7 @@ export const MockItem = ({
                     >
                         {statusCodes.map((code) => (
                             <option key={code} value={code}>
-                                {code} - {(statusTextMap as any)[code]}
+                                {code} - {statusTextMap[Number(code)]}
                             </option>
                         ))}
                     </Select>

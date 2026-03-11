@@ -11,6 +11,7 @@ import {
 import { arrayEquals } from './array';
 import { getNormalizedUrl } from './url';
 import { validate, schema } from './validator';
+import { MockRequest } from './constants';
 
 let global: any =
     // eslint-disable-next-line no-undef
@@ -21,7 +22,7 @@ let global: any =
 
 export class Faker {
     MockXhr: any;
-    requestMap: Record<string, any>;
+    requestMap: Record<string, MockRequest>;
     ignoreQueryParams: boolean;
 
     constructor() {
@@ -45,7 +46,7 @@ export class Faker {
             ? [url, ...searchParamKeys, method.toLowerCase()].join('_')
             : '';
 
-    makeInitialRequestMap = (requests: any) => {
+    makeInitialRequestMap = (requests: MockRequest[]) => {
         if (!requests || !Array.isArray(requests)) {
             return;
         }
@@ -60,7 +61,7 @@ export class Faker {
         this.ignoreQueryParams = value;
     };
 
-    add = (request: any) => {
+    add = (request: MockRequest) => {
         const { path, searchParamKeys } = getNormalizedUrl(request.url);
         const key = this.getKey(path, searchParamKeys, request.method);
         const errors = validate(request, schema);
@@ -85,7 +86,7 @@ export class Faker {
         };
     };
 
-    update = (item: any, fieldKey: string, value: any) => {
+    update = (item: MockRequest, fieldKey: string, value: any) => {
         const { url, method } = item;
         const { path, searchParamKeys } = getNormalizedUrl(url);
         const itemKey = this.getKey(path, searchParamKeys, method);
@@ -100,7 +101,7 @@ export class Faker {
         }
     };
 
-    matchMock = (url: string, method = 'GET'): any => {
+    matchMock = (url: string, method = 'GET'): MockRequest | null => {
         const { path, searchParamKeys } = getNormalizedUrl(url);
 
         for (let key in this.requestMap) {

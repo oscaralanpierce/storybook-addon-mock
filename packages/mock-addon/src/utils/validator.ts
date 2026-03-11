@@ -13,7 +13,7 @@ export const schema: Record<string, (value: any) => boolean> = {
     method: (value: any) => {
         return (
             typeof value === 'string' &&
-            methods.find(
+            !!methods.find(
                 (method) => method.toLowerCase() === value.toLowerCase()
             )
         );
