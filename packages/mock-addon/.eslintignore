@@ -4,5 +4,9 @@ node_modules
 #build files
 dist
 
+# config files
+tsup.config.ts
+jest.config.ts
+
 # zx environment
 scripts/prepublish-checks.js

@@ -1,4 +1,4 @@
-import {withRoundTrip} from "storybook-addon-mock/src/withRoundTrip";
+import {withRoundTrip} from "../../mock-addon/src/withRoundTrip";
 
 const Preview = {
   parameters: {
