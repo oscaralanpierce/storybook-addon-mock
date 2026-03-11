@@ -10,7 +10,7 @@ const config = {
     ],
 
     addons: [
-        getAbsolutePath('../../mock-addon/src/preset/manager.ts'),
+        getAbsolutePath('../../mock-addon/src/manager.ts'),
         '@storybook/addon-links',
         {
             name: '@storybook/addon-docs',
